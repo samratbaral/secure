@@ -29,12 +29,12 @@ for mode, folders in MODES.items():
     app.config[mode.upper() + '_CACHE_FOLDER'] = folders['cache_folder']
 
 from type.image.image import image
-# from type.audio.audio import audio
+from type.audio.audio import audio
 from type.text.text import text
 from type.video.video import video
 
 app.register_blueprint(image, url_prefix="/image")
-# app.register_blueprint(audio, url_prefix="/audio")
+app.register_blueprint(audio, url_prefix="/audio")
 app.register_blueprint(text, url_prefix="/text")
 app.register_blueprint(video, url_prefix="/video")
 
