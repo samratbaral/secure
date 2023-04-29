@@ -1,94 +1,100 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
- <head>
-   <meta charset="utf-8">
-   <title>Flask Parent Template</title>
-   <link rel="stylesheet" href="{{ url_for('static',     filename='css/template.css') }}">
-   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+
+<head>
+  <meta charset="utf-8">
+  <title>Flask Parent Template</title>
+  <link rel="stylesheet" href="{{ url_for('static',     filename='css/template.css') }}">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
     integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
     integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
     crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
     integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
     crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
     integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
     crossorigin="anonymous"></script>
 
-  </head>
- <body>
+</head>
 
-    <header>
-      <div class="container">
-        <h1 class="logo">Steganography and Cryptography</h1>
-        <strong><nav>
+<body>
+
+  <header>
+    <div class="container">
+      <h1 class="logo">Cryptography</h1>
+      <strong>
+        <nav>
           <ul class="menu">
-            <li><a href="{{ url_for('home') }}">Home</a></li>
+            <li><a href="{{ url_for('home') }}">Steganography</a></li>
+            <li><a href="{{ url_for('account') }}">Hashing and Key</a></li>
             <li><a href="{{ url_for('about') }}">About</a></li>
           </ul>
-        </nav></strong>
-      </div>
-    </header>
-     <div class="jumbotron jumbotron-fluid mx-5 my-1 rounded-lg">
-      <div class="container">
-          <h1 class="display-4 text-monospace"> Hide Message</h1>
-          <p class="lead">By secretly hiding it in 📃 | 🖼️ | 🎵 | 📹</p>
-      </div>
-  </div>
-
-    {% block content %}
-    {% endblock %}
-    <div class="card-group  my-5 row">
-
-      <div class="card col-md-3 mr-3 rounded-lg bg-light" style="width: 20%">
-        <img src="https://img.icons8.com/color/96/000000/document.png" class="mx-auto"
-          style="width: 100px; height: 100px;" />
-        <div class="card-body align-self-center">
-          <h4 class="card-title text-center text-monospace mb-5">TEXT➡️IMAGE</h4>
-          <div class="btn-group" role="group" aria-label="Basic example">
-            <a href="/text/encode" class="btn btn-outline-dark">Encode</a>
-            <a href="/text/decode" class="btn btn-outline-dark">Decode</a>
-          </div>
-        </div>
-      </div>
-
-      <div class="card col-md-3 mr-3 rounded-lg bg-light" style="width: 20%">
-        <img src="https://img.icons8.com/color/96/000000/full-image.png" class="mx-auto"
-          style="width: 100px; height: 100px;" />
-        <div class="card-body align-self-center">
-          <h4 class="card-title text-center text-monospace mb-5">IMAGE➡️IMAGE</h4>
-          <div class="btn-group" role="group" aria-label="Basic example">
-            <a href="/image/encode" class="btn btn-outline-dark">Encode</a>
-            <a href="/image/decode" class="btn btn-outline-dark">Decode</a>
-          </div>
-        </div>
-      </div>
-
-      <div class="card col-md-3 mr-3 rounded-lg bg-light" style="width: 20%">
-        <img src="https://img.icons8.com/color/96/000000/high-volume.png" class="mx-auto"
-          style="width: 100px; height: 100px;" />
-        <div class="card-body align-self-center">
-          <h4 class="card-title text-center text-monospace mb-5">TEXT➡️AUDIO</h4>
-          <div class="btn-group" role="group" aria-label="Basic example">
-            <a href="/audio/encode" class="btn btn-outline-dark">Encode</a>
-            <a href="/audio/decode" class="btn btn-outline-dark">Decode</a>
-          </div>
-        </div>
-      </div>
-
-      <div class="card col-md-3 rounded-lg bg-light" style="width: 20%">
-        <img src="https://img.icons8.com/color/96/000000/video.png" class="mx-auto"
-          style="width: 100px; height: 100px;" />
-        <div class="card-body align-self-center">
-          <h4 class="card-title text-center text-monospace mb-5">TEXT➡️VIDEO</h4>
-          <div class="btn-group" role="group" aria-label="Basic example">
-            <a href="/video/encode" class="btn btn-outline-dark">Encode</a>
-            <a href="/video/decode" class="btn btn-outline-dark">Decode</a>
-          </div>
-        </div>
-      </div>
-
+        </nav>
+      </strong>
     </div>
- </body>
+  </header>
+  <!-- <div class="jumbotron jumbotron-fluid mx-5 my-1 rounded-lg">
+    <div class="container">
+      <h1 class="display-4 text-monospace"> Hide Message</h1>
+      <p class="lead">By secretly hiding it in 📃 | 🖼️ | 🎵 | 📹</p>
+    </div>
+  </div> -->
+
+  {% block content %}
+  {% endblock %}
+  <!-- <div class="card-group  my-5 row">
+
+    <div class="card col-md-3 mr-3 rounded-lg bg-light" style="width: 20%">
+      <img src="https://img.icons8.com/color/96/000000/document.png" class="mx-auto"
+        style="width: 100px; height: 100px;" />
+      <div class="card-body align-self-center">
+        <h4 class="card-title text-center text-monospace mb-5">TEXT➡️IMAGE</h4>
+        <div class="btn-group" role="group" aria-label="Basic example">
+          <a href="/text/encode" class="btn btn-outline-dark">Encode</a>
+          <a href="/text/decode" class="btn btn-outline-dark">Decode</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="card col-md-3 mr-3 rounded-lg bg-light" style="width: 20%">
+      <img src="https://img.icons8.com/color/96/000000/full-image.png" class="mx-auto"
+        style="width: 100px; height: 100px;" />
+      <div class="card-body align-self-center">
+        <h4 class="card-title text-center text-monospace mb-5">IMAGE➡️IMAGE</h4>
+        <div class="btn-group" role="group" aria-label="Basic example">
+          <a href="/image/encode" class="btn btn-outline-dark">Encode</a>
+          <a href="/image/decode" class="btn btn-outline-dark">Decode</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="card col-md-3 mr-3 rounded-lg bg-light" style="width: 20%">
+      <img src="https://img.icons8.com/color/96/000000/high-volume.png" class="mx-auto"
+        style="width: 100px; height: 100px;" />
+      <div class="card-body align-self-center">
+        <h4 class="card-title text-center text-monospace mb-5">TEXT➡️AUDIO</h4>
+        <div class="btn-group" role="group" aria-label="Basic example">
+          <a href="/audio/encode" class="btn btn-outline-dark">Encode</a>
+          <a href="/audio/decode" class="btn btn-outline-dark">Decode</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="card col-md-3 rounded-lg bg-light" style="width: 20%">
+      <img src="https://img.icons8.com/color/96/000000/video.png" class="mx-auto"
+        style="width: 100px; height: 100px;" />
+      <div class="card-body align-self-center">
+        <h4 class="card-title text-center text-monospace mb-5">TEXT➡️VIDEO</h4>
+        <div class="btn-group" role="group" aria-label="Basic example">
+          <a href="/video/encode" class="btn btn-outline-dark">Encode</a>
+          <a href="/video/decode" class="btn btn-outline-dark">Decode</a>
+        </div>
+      </div>
+    </div>
+
+  </div> -->
+</body>
+
 </html>
