@@ -1,73 +1,88 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About Flask</title>
-  </head>
-  <body>
-    <h1> Hashing, Key, Password </h1>
-    <p>  Encryption your password here</p>
 
-    <div class="jumbotron jumbotron-fluid mx-5 my-1 rounded-lg">
-      <div class="container">
-        <h1 class="display-4 text-monospace"> Encryption and Decryption</h1>
-        <p class="lead">By using AES, RSA</p>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Flask</title>
+</head>
+
+<body>
+  <h1> Hashing, Key, Password </h1>
+  <p> Encryption your password here</p>
+
+  <div class="jumbotron jumbotron-fluid mx-5 my-1 rounded-lg">
+    <div class="container">
+      <h1 class="display-4 text-monospace"> Encryption and Decryption</h1>
+      <p class="lead">By using AES, RSA</p>
+    </div>
+    <div class="container">
+      <h1 class="display-4 text-monospace"> Generate Key</h1>
+      <p class="lead">By using 1,2,3 DES for SYM ans AYS Key </p>
+    </div>
+    <div class="container">
+      <h1 class="display-4 text-monospace"> Hashing</h1>
+      <p class="lead">By using hashing to secure password</p>
+    </div>
+  </div>
+
+
+  <div class="card-group  my-5 row">
+
+    <div class="card col-md-3 mr-3 rounded-lg bg-light" style="width: 20%">
+      <img src="https://img.icons8.com/office/480/null/key.png" class="mx-auto" style="width: 100px; height: 100px;" />
+      <div class="card-body align-self-center">
+        <h4 class="card-title text-center text-monospace mb-5">Generate</h4>
+        <div class="btn-group" role="group" aria-label="Basic example">
+          <a href="/generate/password" class="btn btn-outline-dark">Password</a>
+          <a href="/generate/key" class="btn btn-outline-dark">Key(s)</a>
+        </div>
       </div>
-      <div class="container">
-        <h1 class="display-4 text-monospace"> Generate Key</h1>
-        <p class="lead">By using 1,2,3 DES for SYM ans AYS Key </p>
+    </div>
+
+    <div class="card col-md-3 mr-3 rounded-lg bg-light" style="width: 20%">
+      <img src="https://img.icons8.com/color/48/null/lock-2.png" class="mx-auto" style="width: 100px; height: 100px;" />
+      <div class="card-body align-self-center">
+        <h4 class="card-title text-center text-monospace mb-5">AES</h4>
+        <div class="btn-group" role="group" aria-label="Basic example">
+          <a href="/text/encode" class="btn btn-outline-dark">Encryption</a>
+          <a href="/text/decode" class="btn btn-outline-dark">Decryption</a>
+        </div>
       </div>
-      <div class="container">
-        <h1 class="display-4 text-monospace"> Hashing</h1>
-        <p class="lead">By using hashing to secure password</p>
+    </div>
+
+    <div class="card col-md-3 mr-3 rounded-lg bg-light" style="width: 20%">
+      <img src="https://img.icons8.com/ios/100/null/user-shield.png" class="mx-auto"
+        style="width: 100px; height: 100px;" />
+      <div class="card-body align-self-center">
+        <h4 class="card-title text-center text-monospace mb-5">RSA</h4>
+        <div class="btn-group" role="group" aria-label="Basic example">
+          <a href="/text/encode" class="btn btn-outline-dark">Encryption</a>
+          <a href="/text/decode" class="btn btn-outline-dark">Decryption</a>
+        </div>
       </div>
     </div>
 
 
-    <div class="card-group  my-5 row">
-
-      <div class="card col-md-3 mr-3 rounded-lg bg-light" style="width: 20%">
-        <img src="https://img.icons8.com/color/48/null/lock-2.png"class="mx-auto"
-          style="width: 100px; height: 100px;" />
-        <div class="card-body align-self-center">
-          <h4 class="card-title text-center text-monospace mb-5">AES</h4>
-          <div class="btn-group" role="group" aria-label="Basic example">
-            <a href="/text/encode" class="btn btn-outline-dark">Encryption</a>
-            <a href="/text/decode" class="btn btn-outline-dark">Decryption</a>
-          </div>
+    <div class="card col-md-3 mr-3 rounded-lg bg-light" style="width: 20%">
+      <img src="https://img.icons8.com/color/96/000000/document.png" class="mx-auto"
+        style="width: 100px; height: 100px;" />
+      <div class="card-body align-self-center">
+        <h4 class="card-title text-center text-monospace mb-5">File</h4>
+        <div class="btn-group" role="group" aria-label="Basic example">
+          <a href="/text/encode" class="btn btn-outline-dark">Encryption</a>
+          <a href="/text/decode" class="btn btn-outline-dark">Decryption</a>
+          <a href="/text/decode" class="btn btn-outline-dark">Hashing</a>
         </div>
       </div>
-
-      <div class="card col-md-3 mr-3 rounded-lg bg-light" style="width: 20%">
-        <img src="https://img.icons8.com/office/480/null/key.png" class="mx-auto"
-          style="width: 100px; height: 100px;" />
-        <div class="card-body align-self-center">
-          <h4 class="card-title text-center text-monospace mb-5">KEY</h4>
-          <div class="btn-group" role="group" aria-label="Basic example">
-            <a href="/image/encode" class="btn btn-outline-dark">Get SYS Key</a>
-            <a href="/image/decode" class="btn btn-outline-dark">Get ASY Key</a>
-          </div>
-        </div>
-      </div>
-
-      <div class="card col-md-3 mr-3 rounded-lg bg-light" style="width: 20%">
-        <img src="https://img.icons8.com/ios/100/null/user-shield.png" class="mx-auto"
-          style="width: 100px; height: 100px;" />
-        <div class="card-body align-self-center">
-          <h4 class="card-title text-center text-monospace mb-5">Hashing</h4>
-          <div class="btn-group" role="group" aria-label="Basic example">
-            <a href="/audio/encode" class="btn btn-outline-dark">Hashing</a>
-            <a href="/audio/decode" class="btn btn-outline-dark">Plaintext</a>
-          </div>
-        </div>
-      </div>
-
     </div>
-    {% extends "template.html" %}
-    {% block content %}
 
-    <h1> Hashing and Key </h1>
-    {% endblock %}
-  </body>
+  </div>
+  {% extends "template.html" %}
+  {% block content %}
+
+  <h1> Hashing and Key </h1>
+  {% endblock %}
+</body>
+
 </html>

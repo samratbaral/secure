@@ -17,6 +17,22 @@ MODES = {
     'Video': {
         'upload_folder': 'type/video/static',
         'cache_folder': 'type/video/__pycache__'
+    },
+    'Generate': {
+        'upload_folder': 'privacy/generate/static',
+        'cache_folder': 'privacy/generate/__pycache__'
+    },
+     'RSA': {
+        'upload_folder': 'privacy/rsa/static',
+        'cache_folder': 'privacy/rsa/__pycache__'
+    },
+     'AES': {
+        'upload_folder': 'privacy/aes/static',
+        'cache_folder': 'privacy/aes/__pycache__'
+    },
+     'File': {
+        'upload_folder': 'privacy/file/static',
+        'cache_folder': 'privacy/file/__pycache__'
     }
 }
 
@@ -28,10 +44,18 @@ for mode, folders in MODES.items():
     app.config['UPLOAD_' + mode.upper() + '_FOLDER'] = folders['upload_folder']
     app.config[mode.upper() + '_CACHE_FOLDER'] = folders['cache_folder']
 
+# Steganography
 from type.image.image import image
 from type.audio.audio import audio
 from type.text.text import text
 from type.video.video import video
+
+# hashing, password, keys,rsa, aes
+from privacy.generate.generate import generate
+# from privacy.rsa.rsa import rsa
+# from privacy.aes.aes import aes
+# from privacy.file.file import file
+
 
 app.register_blueprint(image, url_prefix="/image")
 app.register_blueprint(audio, url_prefix="/audio")
