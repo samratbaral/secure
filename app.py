@@ -1,17 +1,10 @@
-# Steganography
-from type.video.video import video
-from type.text.text import text
-from type.audio.audio import audio
-from type.image.image import image
-
-# hashing, password, keys, rsa, aes
-# from privacy.file.file import file
-# from privacy.aes.aes import aes
-# from privacy.rsa.rsa import rsa
 from privacy.generate.generate import generate
-
+from type.image.image import image
+from type.audio.audio import audio
+from type.text.text import text
+from type.video.video import video
 import os
-from flask import Flask, render_template, request, redirect, url_for, flash, send_file
+from flask import Flask, render_template, request, redirect, url_for, flash, send_file, Blueprint
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
 from user_form import EmailFormMixin, PasswordFormMixin, SecurityQuestionFormMixin, RegistrationForm, LoginForm, PasswordResetForm
@@ -73,6 +66,22 @@ for mode, folders in MODES.items():
     app.config['UPLOAD_' + mode.upper() + '_FOLDER'] = folders['upload_folder']
     app.config[mode.upper() + '_CACHE_FOLDER'] = folders['cache_folder']
 
+
+# Steganography
+
+# hashing, password, keys, rsa, aes
+# from privacy.file.file import file
+# from privacy.aes.aes import aes
+# from privacy.rsa.rsa import rsa
+
+
+app.register_blueprint(image, url_prefix="/image")
+app.register_blueprint(audio, url_prefix="/audio")
+app.register_blueprint(text, url_prefix="/text")
+app.register_blueprint(video, url_prefix="/video")
+# app.register_blueprint(generate, url_prefix="/generate")
+
+
 # Database Setup SQLITE
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
 db = SQLAlchemy(app)
@@ -93,7 +102,7 @@ class User(UserMixin, db.Model):
 
     @staticmethod
     def generate_password_hash(password):
-        hashed_password = generate_password_hash(password, method='sha256')
+        hashed_password = generate_password_hash(password)
         return hashed_password
 
     def set_password(self, password):
@@ -106,14 +115,7 @@ class User(UserMixin, db.Model):
 with app.app_context():
     db.create_all()
 
-
-app.register_blueprint(image, url_prefix="/image")
-app.register_blueprint(audio, url_prefix="/audio")
-app.register_blueprint(text, url_prefix="/text")
-app.register_blueprint(video, url_prefix="/video")
-
 # Landing Page
-
 
 
 # Home: User Home: Let User do Steganography, Hashing, Password, Keys, RSA, AES
@@ -128,11 +130,13 @@ def load_user(user_id):
 
 # About: Secure App About Page
 
+
 @app.route("/user")
 def user():
     return render_template('user.html')
 
 # Register Page
+
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -150,6 +154,8 @@ def register():
     return render_template('register.html', form=form)
 
 # Login Page
+
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
@@ -165,12 +171,15 @@ def login():
     return render_template('login.html', form=form)
 
 # Logout Page
+
+
 @app.route('/logout')
 @login_required
 def logout():
     logout_user()
     flash('You have been logged out.', 'info')
     return redirect(url_for('login'))
+
 
 @app.route('/forgot_password', methods=['GET', 'POST'])
 def forgot_password():
@@ -187,10 +196,6 @@ def forgot_password():
     return render_template('forgot_password.html', form=form)
 
 
-
-
-
-
 @app.route("/about")
 def about():
     return render_template("about.html")
@@ -203,4 +208,4 @@ def account():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(port=5000, debug=True)
