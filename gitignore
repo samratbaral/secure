@@ -40,5 +40,6 @@ certificates/
 #database
 .DS_Store/
 .DS_Store
-
+instance/
+instance
 
