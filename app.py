@@ -94,10 +94,10 @@ login_manager.login_view = 'login'
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(50), nullable=False)
-    password = db.Column(db.String(255), nullable=False)
-    security_question = db.Column(db.String(255), nullable=False)
-    security_answer = db.Column(db.String(255), nullable=False)
+    email = db.Column(db.String(60), nullable=False)
+    password = db.Column(db.String(244), nullable=False)
+    security_question = db.Column(db.String(274), nullable=False)
+    security_answer = db.Column(db.String(274), nullable=False)
 
     @staticmethod
     def generate_password_hash(password):
@@ -139,7 +139,7 @@ def register():
         user.security_answer = form.security_answer.data
         db.session.add(user)
         db.session.commit()
-        flash('Registration successful. You can now log in.', 'success')
+        flash('Registration Complete.', 'success')
         return redirect(url_for('login'))
     print(form)
     return render_template('register.html', form=form)
@@ -171,7 +171,7 @@ def login():
 @login_required
 def logout():
     logout_user()
-    flash('You have been logged out.', 'info')
+    flash('logged out.', 'info')
     return redirect(url_for('login'))
 
 # Forgot Password Page
@@ -216,59 +216,57 @@ def index():
 
 
 # 3-DES Encryption and Decryption
-def des3_encrypt(plain_text, key, mode, iv=None):
+def des3_encrypt(plaintext, key, mode, iv=None):
     if mode in (DES3.MODE_CBC, DES3.MODE_CFB, DES3.MODE_OFB):
         cipher = DES3.new(key, mode, iv)
     else:
         cipher = DES3.new(key, mode)
-    return cipher.encrypt(pad(plain_text, 8))
+    return cipher.encrypt(pad(plaintext, 8))
 
 
-def des3_decrypt(cipher_text, key, mode, iv=None):
+def des3_decrypt(ciphertext, key, mode, iv=None):
     if mode in (DES3.MODE_CBC, DES3.MODE_CFB, DES3.MODE_OFB):
         cipher = DES3.new(key, mode, iv)
     else:
         cipher = DES3.new(key, mode)
-    return unpad(cipher.decrypt(cipher_text), 8)
+    return unpad(cipher.decrypt(ciphertext), 8)
 
 # AES Encryption and Decryption
-
-
-def aes_encrypt(plain_text, key, mode, iv=None):
+def aes_encrypt(plaintext, key, mode, iv=None):
     if mode in (AES.MODE_CBC, AES.MODE_CFB, AES.MODE_OFB):
         cipher = AES.new(key, mode, iv)
     else:
         cipher = AES.new(key, mode)
-    return cipher.encrypt(pad(plain_text, 16))
+    return cipher.encrypt(pad(plaintext, 16))
 
 
-def aes_decrypt(cipher_text, key, mode, iv=None):
+def aes_decrypt(ciphertext, key, mode, iv=None):
     if mode in (AES.MODE_CBC, AES.MODE_CFB, AES.MODE_OFB):
         cipher = AES.new(key, mode, iv)
     else:
         cipher = AES.new(key, mode)
-    return unpad(cipher.decrypt(cipher_text), 16)
+    return unpad(cipher.decrypt(ciphertext), 16)
 
 # RSA Key Generation, Encryption, and Decryption
 
 
 def generate_rsa_keys():
     key = RSA.generate(2048)
-    private_key = key.export_key()
-    public_key = key.publickey().export_key()
-    return private_key, public_key
+    private = key.export_key()
+    public = key.publickey().export_key()
+    return private, public
 
 
-def rsa_encrypt(plain_text, public_key):
+def rsa_encrypt(plaintext, public_key):
     rsa_key = RSA.import_key(public_key)
     cipher = PKCS1_OAEP.new(rsa_key)
-    return cipher.encrypt(plain_text)
+    return cipher.encrypt(plaintext)
 
 
-def rsa_decrypt(cipher_text, private_key):
-    rsa_key = RSA.import_key(private_key)
+def rsa_decrypt(ciphertext, private):
+    rsa_key = RSA.import_key(private)
     cipher = PKCS1_OAEP.new(rsa_key)
-    return cipher.decrypt(cipher_text)
+    return cipher.decrypt(ciphertext)
 
 # SHA-2 and SHA-3 Hashing
 
@@ -279,7 +277,7 @@ def sha2_hash(text, bit_size=256):
     elif bit_size == 512:
         h = SHA512.new()
     else:
-        raise ValueError("Invalid bit size")
+        raise ValueError("Invalid bit")
     h.update(text)
     return h.hexdigest()
 
@@ -290,7 +288,7 @@ def sha3_hash(text, bit_size=256):
     elif bit_size == 512:
         h = SHA3_512.new()
     else:
-        raise ValueError("Invalid bit size")
+        raise ValueError("Invalid bit")
     h.update(text)
     return h.hexdigest()
 
@@ -365,7 +363,7 @@ def encrypt():
                 # public_key = request.form["public_key"].encode()
                 result = rsa_encrypt(plaintext, key)
             else:
-                result = "Invalid encryption method selected"
+                result = "Invalid"
                 return render_template("encryptFile.html", result=result)
 
             return send_file(
@@ -460,7 +458,7 @@ def compare_hashes():
 
         # Check if the files are allowed
         if not file1 or not file2 or not allowed_file(file1.filename) or not allowed_file(file2.filename):
-            flash("Please upload two files with allowed extensions", "error")
+            flash("two files with allowed", "error")
             return redirect(url_for("index"))
 
         # Save the files and compute their SHA-256 hashes
@@ -473,9 +471,9 @@ def compare_hashes():
 
         # Compare the hashes and return the result
         if hash1 == hash2:
-            result = "The two files have the same SHA-256 hash"
+            result = "same SHA-256 hash"
         else:
-            result = "The two files have different SHA-256 hashes"
+            result = "different SHA-256 hashes"
 
     return render_template("compare_hash.html", result=result)
 
@@ -537,8 +535,8 @@ def key():
         method = request.form["key_generation_method"]
 
         if method == "rsa":
-            private_key, public_key = generate_rsa_keys()
-            result = f"Private Key:\n{private_key.decode()}\n\nPublic Key:\n{public_key.decode()}"
+            private, public = generate_rsa_keys()
+            result = f"Private Key:\n{private.decode()}\n\nPublic Key:\n{public.decode()}"
         else:
             result = "Invalid key generation method selected"
     return render_template("key.html", result=result)
@@ -547,43 +545,29 @@ def key():
 @app.route("/sign", methods=["POST"])
 @login_required
 def sign():
-    # Implement the signing logic based on user input
-    # Get user input from the form and call the appropriate signing function
-
+    # Input Forum
     text_to_sign = request.form["text_to_sign"]
     private_key = request.form["private_key"].encode()
     signature_algorithm = request.form["signature_algorithm"]
-
-    # Call the appropriate signing function based on the selected algorithm
-    # (You will need to implement these functions)
-
     if signature_algorithm == "rsa_pss":
         result = rsa_pss_sign(text_to_sign, private_key)
     elif signature_algorithm == "ecdsa":
         result = ecdsa_sign(text_to_sign, private_key)
     else:
         result = "Invalid signing algorithm selected"
-
     return render_template("result.html", result=result)
 
 
 @app.route("/verify", methods=["POST"])
 def verify():
- # Implement the verification logic based on user input
-    # Get user input from the form and call the appropriate verification function
-
     text_to_verify = request.form["text_to_verify"]
-    public_key = request.form["public_key"].encode()
+    public = request.form["public_key"].encode()
     signature = request.form["signature"].encode()
     verification_algorithm = request.form["verification_algorithm"]
-
-    # Call the appropriate verification function based on the selected algorithm
-    # (You will need to implement these functions)
-
     if verification_algorithm == "rsa_pss":
-        result = rsa_pss_verify(text_to_verify, public_key, signature)
+        result = rsa_pss_verify(text_to_verify, public, signature)
     elif verification_algorithm == "ecdsa":
-        result = ecdsa_verify(text_to_verify, public_key, signature)
+        result = ecdsa_verify(text_to_verify, public, signature)
     else:
         result = "Invalid verification algorithm selected"
 
