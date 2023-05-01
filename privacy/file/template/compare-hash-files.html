@@ -1,0 +1,30 @@
+{% extends "file.html" %}
+
+{% block content %}
+    <head>
+        <title>Compare file hashes</title>
+      </head>
+      <body>
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            <ul class="flashes">
+            {% for message in messages %}
+              <li>{{ message }}</li>
+            {% endfor %}
+            </ul>
+          {% endif %}
+        {% endwith %}
+        <h1>Compare file hashes</h1>
+        <p>{{result}}</p>
+        <form method="POST" action="{{ url_for('compare_hashes') }}" enctype="multipart/form-data">
+
+          <label for="file1">File 1:</label>
+          <input type="file" name="file1" id="file1">
+          <br>
+          <label for="file2">File 2:</label>
+          <input type="file" name="file2" id="file2">
+          <br>
+          <input type="submit" value="Compare">
+        </form>
+      </body>
+{% endblock %}

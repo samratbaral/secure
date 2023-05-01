@@ -1,0 +1,29 @@
+{% extends "aes.html" %}
+
+{% block content %}
+    <h2>Decrypt File</h2>
+    <p>{{result}}</p>
+    <form action="{{ url_for('decrypt_file') }}" method="post" enctype="multipart/form-data">
+        <h2>Decrypt File</h2>
+        <label for="file">Select File:</label>
+        <input type="file" id="file" name="file">
+        <select id="decryption_method" name="decryption_method">
+            <option value="3des">3DES</option>
+            <option value="aes">AES</option>
+            <option value="rsa">RSA</option>
+        </select>
+        <select id="mode" name="mode">
+            <option value="2">(DES) MODE_CBC</option>
+            <option value="3">(DES) MODE_CFB</option>
+            <option value="5">(DES) MODE_OFB</option>
+            <option value="2">(AES) MODE_CBC</option>
+            <option value="3">(AES) MODE_CFB</option>
+            <option value="5">(AES) MODE_OFB</option>
+        </select>
+        <label for="key">Key:</label>
+        <input type="text" id="key" name="key">
+        <label for="iv">IV:</label>
+        <input type="text" id="iv" name="iv">
+        <button type="submit">Decrypt</button>
+    </form>
+{% endblock %}
