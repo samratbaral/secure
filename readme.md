@@ -1,7 +1,13 @@
 # Getting Started
 
+## Setup Virtual Environment
+- `python3 -m venv venv`
+- the name nenv can be set to any name
+
+
 ## Virtual Environment Setup
-- `./venv/Scripts\activate`
+- `. venv/bin/activate`
+- This activate virtual environment
 
 ## Upgrade Python
 - `python3 -m pip3 install --upgrade pip3`

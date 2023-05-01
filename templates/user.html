@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome User</title>
+    <link rel="stylesheet" href="{{ url_for('static',     filename='css/template.css') }}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+        integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+        integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+        crossorigin="anonymous"></script>
+
+</head>
+
+<body>
+    <div class="jumbotron jumbotron-fluid mx-5 my-1 rounded-lg">
+        <div class="container">
+            <h1 class="display-3 text-monospace"> Protect, Secure and Privacy</h1>
+            <p class="lead">
+            <h2> Hashing, Key, Password, Decode, Encode, Secret </h2>
+            </p>
+        </div>
+        <div class="jumbotron jumbotron-fluid mx-5 my-1 rounded-lg">
+            <div class="container">
+                <h1 class="display-4 text-monospace"> Login / Register </h1>
+                <p class="lead">
+                {% if current_user.is_authenticated %}
+                <p>Hello, {{ current_user.name }}!</p>
+                <a href="{{ url_for('logout') }}">Logout</a>
+                {% else %}
+                <p>Welcome, please log in or register.</p>
+                <a href="{{ url_for('login') }}">Login</a> | <a href="{{ url_for('register') }}">Register</a>
+                {% endif %}
+                <hr>
+                <p><a href="{{ url_for('dashboard') }}">Go to Main Page</a></p>
+
+            </div>
+        </div>
+
+    <div class="jumbotron jumbotron-fluid mx-5 my-1 rounded-lg">
+        <div class="container">
+          <h1 class="display-6 text-monospace"> Hide Message</h1>
+          <p class="lead">By secretly hiding it in 📃 | 🖼️ | 🎵 | 📹</p>
+        </div>
+          <div class="container">
+            <h1 class="display-6 text-monospace"> Encryption and Decryption</h1>
+            <p class="lead">By using AES, RSA</p>
+          </div>
+          <div class="container">
+            <h1 class="display-6 text-monospace"> Generate Key</h1>
+            <p class="lead">By using 1,2,3 DES for SYM ans AYS Key </p>
+          </div>
+          <div class="container">
+            <h1 class="display-6 text-monospace"> Hashing</h1>
+            <p class="lead">By using hashing to secure password</p>
+          </div>
+
+      </div>
+    </div>
+
+
+
+</body>
+
+</html>
