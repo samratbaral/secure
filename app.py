@@ -115,20 +115,28 @@ with app.app_context():
     db.create_all()
 
 # Landing Page Home: User Home
+
+
 @app.route("/")
 def home():
     return render_template("home.html")
 
 # User do Steganography, Hashing, Password, Keys, RSA, AES
+
+
 @app.route("/steganography")
+@login_required
 def steganography():
     return render_template("steganography.html")
+
 
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
 
 # Register Page
+
+
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     form = RegistrationForm()
@@ -145,6 +153,8 @@ def register():
     return render_template('register.html', form=form)
 
 # Login Page
+
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
@@ -160,6 +170,8 @@ def login():
     return render_template('login.html', form=form)
 
 # Logout Page
+
+
 @app.route('/logout')
 @login_required
 def logout():
@@ -168,6 +180,8 @@ def logout():
     return redirect(url_for('login'))
 
 # Forgot Password Page
+
+
 @app.route('/forgot_password', methods=['GET', 'POST'])
 def forgot_password():
     form = PasswordResetForm()
@@ -183,6 +197,8 @@ def forgot_password():
     return render_template('forgot_password.html', form=form)
 
 # About: Secure App About Page
+
+
 @app.route("/about")
 def about():
     return render_template("about.html")
@@ -192,6 +208,388 @@ def about():
 @app.route("/account")
 def account():
     return render_template("account.html")
+
+# Account: User Account Page: Similar to Wallet
+
+
+@app.route("/dashboard")
+def dashboard():
+    return render_template("template.html")
+
+
+# 3-DES Encryption and Decryption
+def des3_encrypt(plain_text, key, mode, iv=None):
+    if mode in (DES3.MODE_CBC, DES3.MODE_CFB, DES3.MODE_OFB):
+        cipher = DES3.new(key, mode, iv)
+    else:
+        cipher = DES3.new(key, mode)
+    return cipher.encrypt(pad(plain_text, 8))
+
+
+def des3_decrypt(cipher_text, key, mode, iv=None):
+    if mode in (DES3.MODE_CBC, DES3.MODE_CFB, DES3.MODE_OFB):
+        cipher = DES3.new(key, mode, iv)
+    else:
+        cipher = DES3.new(key, mode)
+    return unpad(cipher.decrypt(cipher_text), 8)
+
+# AES Encryption and Decryption
+
+
+def aes_encrypt(plain_text, key, mode, iv=None):
+    if mode in (AES.MODE_CBC, AES.MODE_CFB, AES.MODE_OFB):
+        cipher = AES.new(key, mode, iv)
+    else:
+        cipher = AES.new(key, mode)
+    return cipher.encrypt(pad(plain_text, 16))
+
+
+def aes_decrypt(cipher_text, key, mode, iv=None):
+    if mode in (AES.MODE_CBC, AES.MODE_CFB, AES.MODE_OFB):
+        cipher = AES.new(key, mode, iv)
+    else:
+        cipher = AES.new(key, mode)
+    return unpad(cipher.decrypt(cipher_text), 16)
+
+# RSA Key Generation, Encryption, and Decryption
+
+
+def generate_rsa_keys():
+    key = RSA.generate(2048)
+    private_key = key.export_key()
+    public_key = key.publickey().export_key()
+    return private_key, public_key
+
+
+def rsa_encrypt(plain_text, public_key):
+    rsa_key = RSA.import_key(public_key)
+    cipher = PKCS1_OAEP.new(rsa_key)
+    return cipher.encrypt(plain_text)
+
+
+def rsa_decrypt(cipher_text, private_key):
+    rsa_key = RSA.import_key(private_key)
+    cipher = PKCS1_OAEP.new(rsa_key)
+    return cipher.decrypt(cipher_text)
+
+# SHA-2 and SHA-3 Hashing
+
+
+def sha2_hash(text, bit_size=256):
+    if bit_size == 256:
+        h = SHA256.new()
+    elif bit_size == 512:
+        h = SHA512.new()
+    else:
+        raise ValueError("Invalid bit size")
+    h.update(text)
+    return h.hexdigest()
+
+
+def sha3_hash(text, bit_size=256):
+    if bit_size == 256:
+        h = SHA3_256.new()
+    elif bit_size == 512:
+        h = SHA3_512.new()
+    else:
+        raise ValueError("Invalid bit size")
+    h.update(text)
+    return h.hexdigest()
+
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
+def genPassword(password_length):
+    return secrets.token_hex(password_length)[:password_length]
+
+
+def save_file(file):
+    filename = secure_filename(file.filename)
+    file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+    return filename
+
+
+@app.route('/generate_password', methods=['GET', 'POST'])
+@login_required
+def generate_password():
+    result = ""
+    if request.method == "POST":
+        password_length = int(request.form["length"])
+        password = genPassword(password_length)
+        result = f"Generated Password: {password}"
+    return render_template("generatePassword.html", result=result)
+
+
+@app.route('/upload_file', methods=['GET', 'POST'])
+@login_required
+def upload_file():
+    if request.method == 'POST':
+        if 'file' not in request.files:
+            return "No file part"
+        file = request.files['file']
+        if file.filename == '':
+            return "No selected file"
+        if file and allowed_file(file.filename):
+            filename = save_file(file)
+            return "File uploaded and saved."
+    return render_template("fileUploadDownload.html")
+
+
+@app.route('/download/<path:filename>')
+def download_file(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename, as_attachment=True)
+
+
+@app.route("/encrypt", methods=["GET", "POST"])
+@login_required
+def encrypt_file():
+    # Implement the encryption logic based on user input
+    # Get user input from the form and call the appropriate encryption function
+    result = ""
+    if request.method == "POST":
+        file = request.files["file"]
+        if not file or file.filename == "":
+            flash("Forgot to upload file")
+        else:
+            plaintext = file.read()
+            method = request.form["encryption_method"]
+            key = request.form['key'].encode('utf-8')
+            mode = int(request.form["mode"])
+            iv = request.form["iv"].encode()
+
+            if method == "3des":
+                result = des3_encrypt(plaintext, key, mode, iv)
+            elif method == "aes":
+                result = aes_encrypt(plaintext, key, mode, iv)
+            elif method == "rsa":
+                # public_key = request.form["public_key"].encode()
+                result = rsa_encrypt(plaintext, key)
+            else:
+                result = "Invalid encryption method selected"
+                return render_template("encryptFile.html", result=result)
+
+            return send_file(
+                BytesIO(result),
+                as_attachment=True,
+                download_name=file.filename,
+                mimetype="application/octet-stream",
+            )
+
+    return render_template("encryptFile.html", result=result)
+
+
+@app.route("/decrypt", methods=["GET", "POST"])
+@login_required
+def decrypt_file():
+    # Implement the decryption logic based on user input
+    # Get user input from the form and call the appropriate decryption function
+    result = ""
+    if request.method == "POST":
+        print(request.files)
+        file = request.files["file"]
+        if not file or file.filename == "":
+            flash("Forgot to upload file")
+        else:
+            ciphertext = file.read()
+            method = request.form["decryption_method"]
+            key = request.form["key"].encode()
+            mode = int(request.form["mode"])
+            iv = request.form["iv"].encode()
+
+            if method == "3des":
+                result = des3_decrypt(ciphertext, key, mode, iv)
+            elif method == "aes":
+                result = aes_decrypt(ciphertext, key, mode, iv)
+            elif method == "rsa":
+                # private_key = request.form["private_key"].encode()
+                private_key = key
+                result = rsa_decrypt(ciphertext, private_key)
+            else:
+                result = "Invalid decryption method selected"
+                return render_template("decryptFile.html", result=result)
+
+            return send_file(
+                BytesIO(result),
+                as_attachment=True,
+                download_name=file.filename,
+                mimetype="application/octet-stream",
+            )
+
+    return render_template("decryptFile.html", result=result)
+
+
+@app.route("/hash", methods=["GET", "POST"])
+@login_required
+def hash_file():
+    # Get the input text and selected hashing algorithm from the form
+    result = ""
+    if request.method == "POST":
+        file = request.files["file"]
+        if not file or file.filename == "":
+            flash("Forgot to upload file")
+        else:
+            text_to_hash = file.read()  # request.form["text_to_hash"]
+            selected_algorithm = request.form["selected_algorithm"]
+
+            # Call the appropriate hashing function
+            if selected_algorithm == "sha2_256":
+                result = sha2_hash(text_to_hash, bit_size=256)
+            elif selected_algorithm == "sha2_512":
+                result = sha2_hash(text_to_hash, bit_size=512)
+            elif selected_algorithm == "sha3_256":
+                result = sha3_hash(text_to_hash, bit_size=256)
+            elif selected_algorithm == "sha3_512":
+                result = sha3_hash(text_to_hash, bit_size=512)
+            else:
+                result = "Error: Invalid hashing algorithm selected"
+                return render_template("hashFile.html", result=result)
+
+            result = "Hash: " + result
+
+    return render_template("hashFile.html", result=result)
+
+
+@app.route("/compare_hashes", methods=["GET", "POST"])
+@login_required
+def compare_hashes():
+    result = ""
+    if request.method == "POST":
+        # Get the uploaded files
+        file1 = request.files["file1"]
+        file2 = request.files["file2"]
+
+        # Check if the files are allowed
+        if not file1 or not file2 or not allowed_file(file1.filename) or not allowed_file(file2.filename):
+            flash("Please upload two files with allowed extensions", "error")
+            return redirect(url_for("index"))
+
+        # Save the files and compute their SHA-256 hashes
+        # file1_name = save_file(file1)
+        # file2_name = save_file(file2)
+        # with open(os.path.join(app.config['UPLOAD_FOLDER'], file1_name), "rb") as f:
+        hash1 = sha256(file1.read()).hexdigest()
+        # with open(os.path.join(app.config['UPLOAD_FOLDER'], file2_name), "rb") as f:
+        hash2 = sha256(file2.read()).hexdigest()
+
+        # Compare the hashes and return the result
+        if hash1 == hash2:
+            result = "The two files have the same SHA-256 hash"
+        else:
+            result = "The two files have different SHA-256 hashes"
+
+    return render_template("compareHashes.html", result=result)
+
+
+def rsa_pss_sign(message, private_key):
+    # Import the private key
+    key = RSA.import_key(private_key)
+
+    # Hash the message
+    h = SHA256.new(message.encode())
+
+    # Sign the hash using RSA-PSS
+    signature = pkcs1_15.new(key).sign(h)
+
+    return signature.hex()
+
+
+def rsa_pss_verify(message, signature, public_key):
+    # Import the public key
+    key = RSA.import_key(public_key)
+
+    # Hash the message
+    h = SHA256.new(message.encode())
+
+    # Verify the signature using RSA-PSS
+    try:
+        pkcs1_15.new(key).verify(h, bytes.fromhex(signature))
+        return True
+    except (ValueError, TypeError):
+        return False
+
+
+def ecdsa_sign(message, private_key):
+    # Import the private key
+    sk = ecdsa.SigningKey.from_string(private_key, curve=ecdsa.SECP256k1)
+
+    # Sign the message using ECDSA
+    signature = sk.sign(message.encode())
+
+    return signature.hex()
+
+
+def ecdsa_verify(message, signature, public_key):
+    # Import the public key
+    vk = ecdsa.VerifyingKey.from_string(public_key, curve=ecdsa.SECP256k1)
+
+    # Verify the message using ECDSA
+    try:
+        return vk.verify(bytes.fromhex(signature), message.encode())
+    except (ValueError, TypeError):
+        return False
+
+
+@app.route("/generate_key", methods=["GET", "POST"])
+def generate_key():
+    result = ""
+    if request.method == "POST":
+        # Call the appropriate key generation function based on user input
+        method = request.form["key_generation_method"]
+
+        if method == "rsa":
+            private_key, public_key = generate_rsa_keys()
+            result = f"Private Key:\n{private_key.decode()}\n\nPublic Key:\n{public_key.decode()}"
+        else:
+            result = "Invalid key generation method selected"
+    return render_template("generatekey.html", result=result)
+
+
+@app.route("/sign", methods=["POST"])
+@login_required
+def sign():
+    # Implement the signing logic based on user input
+    # Get user input from the form and call the appropriate signing function
+
+    text_to_sign = request.form["text_to_sign"]
+    private_key = request.form["private_key"].encode()
+    signature_algorithm = request.form["signature_algorithm"]
+
+    # Call the appropriate signing function based on the selected algorithm
+    # (You will need to implement these functions)
+
+    if signature_algorithm == "rsa_pss":
+        result = rsa_pss_sign(text_to_sign, private_key)
+    elif signature_algorithm == "ecdsa":
+        result = ecdsa_sign(text_to_sign, private_key)
+    else:
+        result = "Invalid signing algorithm selected"
+
+    return render_template("result.html", result=result)
+
+
+@app.route("/verify", methods=["POST"])
+def verify():
+ # Implement the verification logic based on user input
+    # Get user input from the form and call the appropriate verification function
+
+    text_to_verify = request.form["text_to_verify"]
+    public_key = request.form["public_key"].encode()
+    signature = request.form["signature"].encode()
+    verification_algorithm = request.form["verification_algorithm"]
+
+    # Call the appropriate verification function based on the selected algorithm
+    # (You will need to implement these functions)
+
+    if verification_algorithm == "rsa_pss":
+        result = rsa_pss_verify(text_to_verify, public_key, signature)
+    elif verification_algorithm == "ecdsa":
+        result = ecdsa_verify(text_to_verify, public_key, signature)
+    else:
+        result = "Invalid verification algorithm selected"
+
+    return render_template("result.html", result=result)
 
 
 if __name__ == "__main__":
