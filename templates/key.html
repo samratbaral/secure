@@ -1,0 +1,14 @@
+{% extends "quickdash.html" %}
+
+{% block content %}
+    <h2>Generate Key</h2>
+    <p>{{result}}</p>
+    <form action="{{ url_for('generate_key') }}" method="post">
+        <h2>Generate Key</h2>
+        <label for="key_generation_method">Key Generation Method:</label>
+        <select id="key_generation_method" name="key_generation_method">
+            <option value="rsa">RSA</option>
+        </select>
+        <button type="submit">Generate Key</button>
+    </form>
+{% endblock %}

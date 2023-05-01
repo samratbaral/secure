@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <title>Crypto App - Result</title>
+</head>
+<body>
+    <h1>Crypto App</h1>
+    <h2>Result</h2>
+    <a href="{{ url_for('dashboard') }}">Back to dashboard</a>
+    
+    {% if result_type == 'file_hash_comparison' %}
+        <h3>File Hash Comparison Result</h3>
+        {% if result %}
+            <p>The hashes are <strong>{{ result }}</strong></p>
+        {% else %}
+            <p>Hashes do not match</p>
+        {% endif %}
+    {% endif %}
+    
+    {% if result_type == 'generate_password' %}
+        <h3>Generated Password</h3>
+        <p>{{ result }}</p>
+    {% endif %}
+    
+    {% if result_type == 'generate_key' %}
+        <h3>Generated Key</h3>
+        <pre>{{ result }}</pre>
+    {% endif %}
+    
+    {% if result_type == 'encrypt_file' %}
+        <h3>File Encrypted Successfully</h3>
+    {% endif %}
+    
+    {% if result_type == 'decrypt_file' %}
+        <h3>File Decrypted Successfully</h3>
+    {% endif %}
+    
+    {% if result_type == 'hash_file' %}
+        <h3>File Hash</h3>
+        <p>{{ result }}</p>
+    {% endif %}
+    
+    {% if filename %}
+        <a href="{{ url_for('download_file', filename=filename) }}">Download file</a>
+    {% endif %}
+</body>
+</html>

@@ -1,0 +1,18 @@
+{% extends "quickdash.html" %}
+
+{% block content %}
+    <h2>Hash File</h2>
+    <form action="{{ url_for('hash_file') }}" method="post" enctype="multipart/form-data">
+        <h2>Hash File</h2>
+        <p>{{result}}</p>
+        <label for="file">Select File:</label>
+        <input type="file" id="file" name="file">
+        <select id="selected_algorithm" name="selected_algorithm">
+            <option value="sha2_256">SHA2-256</option>
+            <option value="sha2_512">SHA2-512</option>
+            <option value="sha3_256">SHA3-256</option>
+            <option value="sha3_512">SHA3-512</option>
+        </select>
+        <button type="submit">Hash</button>
+    </form>
+{% endblock %}

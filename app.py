@@ -9,7 +9,7 @@ from type.audio.audio import audio
 from type.text.text import text
 from type.video.video import video
 import os
-from flask import Flask, render_template, request, redirect, url_for, flash, send_file, Blueprint
+from flask import Flask, render_template, request, redirect, send_from_directory, url_for, flash, send_file, Blueprint
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
 from user_form import EmailFormMixin, PasswordFormMixin, SecurityQuestionFormMixin, RegistrationForm, LoginForm, PasswordResetForm
@@ -311,7 +311,7 @@ def save_file(file):
     return filename
 
 
-@app.route('/generate_password', methods=['GET', 'POST'])
+@app.route('/password', methods=['GET', 'POST'])
 @login_required
 def generate_password():
     result = ""
@@ -319,10 +319,10 @@ def generate_password():
         password_length = int(request.form["length"])
         password = genPassword(password_length)
         result = f"Generated Password: {password}"
-    return render_template("generatePassword.html", result=result)
+    return render_template("password.html", result=result)
 
 
-@app.route('/upload_file', methods=['GET', 'POST'])
+@app.route('/upload', methods=['GET', 'POST'])
 @login_required
 def upload_file():
     if request.method == 'POST':
@@ -334,7 +334,7 @@ def upload_file():
         if file and allowed_file(file.filename):
             filename = save_file(file)
             return "File uploaded and saved."
-    return render_template("fileUploadDownload.html")
+    return render_template("upload.html")
 
 
 @app.route('/download/<path:filename>')
@@ -377,7 +377,7 @@ def encrypt_file():
                 mimetype="application/octet-stream",
             )
 
-    return render_template("encryptFile.html", result=result)
+    return render_template("encrypt.html", result=result)
 
 
 @app.route("/decrypt", methods=["GET", "POST"])
@@ -417,7 +417,7 @@ def decrypt_file():
                 mimetype="application/octet-stream",
             )
 
-    return render_template("decryptFile.html", result=result)
+    return render_template("decrypt.html", result=result)
 
 
 @app.route("/hash", methods=["GET", "POST"])
@@ -448,7 +448,7 @@ def hash_file():
 
             result = "Hash: " + result
 
-    return render_template("hashFile.html", result=result)
+    return render_template("hash.html", result=result)
 
 
 @app.route("/compare_hashes", methods=["GET", "POST"])
@@ -479,7 +479,7 @@ def compare_hashes():
         else:
             result = "The two files have different SHA-256 hashes"
 
-    return render_template("compareHashes.html", result=result)
+    return render_template("compare_hashes.html", result=result)
 
 
 def rsa_pss_sign(message, private_key):
@@ -531,7 +531,7 @@ def ecdsa_verify(message, signature, public_key):
         return False
 
 
-@app.route("/generate_key", methods=["GET", "POST"])
+@app.route("/key", methods=["GET", "POST"])
 def generate_key():
     result = ""
     if request.method == "POST":
@@ -543,7 +543,7 @@ def generate_key():
             result = f"Private Key:\n{private_key.decode()}\n\nPublic Key:\n{public_key.decode()}"
         else:
             result = "Invalid key generation method selected"
-    return render_template("generatekey.html", result=result)
+    return render_template("key.html", result=result)
 
 
 @app.route("/sign", methods=["POST"])

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <title>Crypto App</title>
+</head>
+<body>
+    <h1>Crypto App</h1>
+
+    <ul>
+        <li><a href="{{ url_for('generate_password') }}">Generate Password</a></li>
+        <li><a href="{{ url_for('generate_key') }}">Generate Key</a></li>
+        <li><a href="{{ url_for('encrypt_file') }}">Encrypt File</a></li>
+        <li><a href="{{ url_for('decrypt_file') }}">Decrypt File</a></li>
+        <li><a href="{{ url_for('hash_file') }}">Hash File</a></li>
+        <li><a href="{{ url_for('compare_hashes') }}">Compare file hashes</a></li>
+    </ul>
+
+    {% block content %}
+    {% endblock %}
+</body>
+</html>
