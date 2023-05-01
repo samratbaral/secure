@@ -20,7 +20,7 @@ from hashlib import sha256
 
 app = Flask(__name__)
 
-FILE_EXT = {'txt', 'pdf', 'png', 'docx', 'xlsx', 'pptx'}3
+FILE_EXT = {'txt', 'pdf', 'png', 'docx', 'xlsx', 'pptx'}
 app.secret_key = "hello"
 
 MODES = {
@@ -93,6 +93,7 @@ with app.app_context():
 
 
 
+
 # Steganography
 from type.image.image import image
 from type.audio.audio import audio
@@ -111,6 +112,15 @@ app.register_blueprint(audio, url_prefix="/audio")
 app.register_blueprint(text, url_prefix="/text")
 app.register_blueprint(video, url_prefix="/video")
 
+#Landing Page
+@app.route("/user")
+def index():
+    return render_template('user.html')
+#Login Page
+@app.route("/user")
+def index():
+    return render_template('user.html')
+#Register Page
 @app.route("/user")
 def index():
     return render_template('user.html')
@@ -118,8 +128,12 @@ def index():
 
 #Home: User Home: Let User do Steganography, Hashing, Password, Keys, RSA, AES
 @app.route("/")
+@login_required
 def home():
     return render_template("home.html")
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
 
 #About: Secure App About Page
 @app.route("/about")
