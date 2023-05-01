@@ -211,7 +211,7 @@ def dashboard():
 
 # Testing Account: User Account Page: Similar to Wallet
 @app.route("/quickdash")
-def quickdash():
+def index():
     return render_template("quickdash.html")
 
 

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <title>Crypto App</title>
+</head>
+<body>
+    <h1>Crypto App</h1>
+
+    <form action="{{ url_for('generate_password') }}" method="post">
+        <h2>Generate Password</h2>
+        <label for="length">Length:</label>
+        <input type="number" id="length" name="length">
+        <button type="submit">Generate Password</button>
+    </form>
+
+    <form action="{{ url_for('generate_key') }}" method="post">
+        <h2>Generate Key</h2>
+        <label for="key_type">Key Type:</label>
+        <select id="key_type" name="key_type">
+            <option value="symmetric">Symmetric</option>
+            <option value="asymmetric">Asymmetric</option>
+        </select>
+        <button type="submit">Generate Key</button>
+    </form>
+
+    <form action="{{ url_for('encrypt') }}" method="post" enctype="multipart/form-data">
+        <h2>Encrypt File</h2>
+        <label for="file">Select File:</label>
+        <input type="file" id="file" name="file">
+        <label for="key">Key:</label>
+        <input type="text" id="key" name="key">
+        <button type="submit">Encrypt</button>
+    </form>
+
+    <form action="{{ url_for('decrypt') }}" method="post" enctype="multipart/form-data">
+        <h2>Decrypt File</h2>
+        <label for="file">Select File:</label>
+        <input type="file" id="file" name="file">
+        <label for="key">Key:</label>
+        <input type="text" id="key" name="key">
+        <button type="submit">Decrypt</button>
+    </form>
+
+    <form action="{{ url_for('hash') }}" method="post" enctype="multipart/form-data">
+        <h2>Hash File</h2>
+        <label for="file">Select File:</label>
+        <input type="file" id="file" name="file">
+        <button type="submit">Hash</button>
+    </form>
+
+    <head>
+        <title>Compare file hashes</title>
+      </head>
+      <body>
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            <ul class="flashes">
+            {% for message in messages %}
+              <li>{{ message }}</li>
+            {% endfor %}
+            </ul>
+          {% endif %}
+        {% endwith %}
+        <h1>Compare file hashes</h1>
+        <form method="POST" action="{{ url_for('compare_hashes') }}" enctype="multipart/form-data">
+
+          <label for="file1">File 1:</label>
+          <input type="file" name="file1" id="file1">
+          <br>
+          <label for="file2">File 2:</label>
+          <input type="file" name="file2" id="file2">
+          <br>
+          <input type="submit" value="Compare">
+        </form>
+      </body>
+
+      <head>
+        <title>File Upload and Download App</title>
+      </head>
+      <body>
+        <h1>File Upload and Download App</h1>
+        <h2>Upload a File</h2>
+        <form action="{{ url_for('upload_file') }}" method="post" enctype="multipart/form-data">
+          <input type="file" name="file">
+          <input type="submit" value="Upload">
+        </form>
+        <h2>Download a File</h2>
+        <ul>
+          {% for file in files %}
+            <li><a href="{{ url_for('download_file', filename=file) }}" download>{{ file }}</a></li>
+          {% endfor %}
+        </ul>
+      </body>
+</body>
+</html>
