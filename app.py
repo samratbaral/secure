@@ -114,29 +114,21 @@ class User(UserMixin, db.Model):
 with app.app_context():
     db.create_all()
 
-# Landing Page Home: User Home
-
-
+# Landing Page Home: User Login/Register/About
 @app.route("/")
 def home():
     return render_template("home.html")
 
 # User do Steganography, Hashing, Password, Keys, RSA, AES
-
-
 @app.route("/steganography")
 @login_required
 def steganography():
     return render_template("steganography.html")
-
-
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
 
 # Register Page
-
-
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     form = RegistrationForm()
@@ -158,13 +150,16 @@ def register():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for('dashboard'))
+        return redirect(url_for('quickdash')) #quick dashboard
+        # return redirect(url_for('dashboard'))
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
         if user and user.check_password(form.password.data):
             login_user(user)
-            return redirect(url_for('dashboard'))
+            return redirect(url_for('quickdash'))  #quick dashboard
+            # return redirect(url_for('dashboard'))
+
         else:
             flash('Invalid email or password.', 'danger')
     return render_template('login.html', form=form)
@@ -210,11 +205,14 @@ def account():
     return render_template("account.html")
 
 # Account: User Account Page: Similar to Wallet
-
-
 @app.route("/dashboard")
 def dashboard():
     return render_template("template.html")
+
+# Testing Account: User Account Page: Similar to Wallet
+@app.route("/quickdash")
+def quickdash():
+    return render_template("quickdash.html")
 
 
 # 3-DES Encryption and Decryption
@@ -298,7 +296,7 @@ def sha3_hash(text, bit_size=256):
 
 
 def allowed_file(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in FILE_EXT
 
 
 def genPassword(password_length):
@@ -313,7 +311,7 @@ def save_file(file):
 
 @app.route('/password', methods=['GET', 'POST'])
 @login_required
-def generate_password():
+def password():
     result = ""
     if request.method == "POST":
         password_length = int(request.form["length"])
@@ -324,7 +322,7 @@ def generate_password():
 
 @app.route('/upload', methods=['GET', 'POST'])
 @login_required
-def upload_file():
+def upload():
     if request.method == 'POST':
         if 'file' not in request.files:
             return "No file part"
@@ -344,7 +342,7 @@ def download_file(filename):
 
 @app.route("/encrypt", methods=["GET", "POST"])
 @login_required
-def encrypt_file():
+def encrypt():
     # Implement the encryption logic based on user input
     # Get user input from the form and call the appropriate encryption function
     result = ""
@@ -382,7 +380,7 @@ def encrypt_file():
 
 @app.route("/decrypt", methods=["GET", "POST"])
 @login_required
-def decrypt_file():
+def decrypt():
     # Implement the decryption logic based on user input
     # Get user input from the form and call the appropriate decryption function
     result = ""
@@ -422,7 +420,7 @@ def decrypt_file():
 
 @app.route("/hash", methods=["GET", "POST"])
 @login_required
-def hash_file():
+def hash():
     # Get the input text and selected hashing algorithm from the form
     result = ""
     if request.method == "POST":
@@ -479,7 +477,7 @@ def compare_hashes():
         else:
             result = "The two files have different SHA-256 hashes"
 
-    return render_template("compare_hashes.html", result=result)
+    return render_template("compare_hash.html", result=result)
 
 
 def rsa_pss_sign(message, private_key):
@@ -532,7 +530,7 @@ def ecdsa_verify(message, signature, public_key):
 
 
 @app.route("/key", methods=["GET", "POST"])
-def generate_key():
+def key():
     result = ""
     if request.method == "POST":
         # Call the appropriate key generation function based on user input

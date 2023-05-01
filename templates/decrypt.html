@@ -3,7 +3,7 @@
 {% block content %}
     <h2>Decrypt File</h2>
     <p>{{result}}</p>
-    <form action="{{ url_for('decrypt_file') }}" method="post" enctype="multipart/form-data">
+    <form action="{{ url_for('decrypt') }}" method="post" enctype="multipart/form-data">
         <h2>Decrypt File</h2>
         <label for="file">Select File:</label>
         <input type="file" id="file" name="file">
@@ -18,7 +18,7 @@
             <option value="5">(DES) MODE_OFB</option>
             <option value="2">(AES) MODE_CBC</option>
             <option value="3">(AES) MODE_CFB</option>
-            <option value="5">(AES) MODE_OFB</option>
+            <option value="5">(AES) MODE_OFB</option>ß
         </select>
         <label for="key">Key:</label>
         <input type="text" id="key" name="key">

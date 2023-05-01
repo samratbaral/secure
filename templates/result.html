@@ -10,8 +10,8 @@
 <body>
     <h1>Crypto App</h1>
     <h2>Result</h2>
-    <a href="{{ url_for('dashboard') }}">Back to dashboard</a>
-    
+    <a href="{{ url_for('quickdash') }}">Back to dashboard</a>
+
     {% if result_type == 'file_hash_comparison' %}
         <h3>File Hash Comparison Result</h3>
         {% if result %}
@@ -20,32 +20,32 @@
             <p>Hashes do not match</p>
         {% endif %}
     {% endif %}
-    
+
     {% if result_type == 'generate_password' %}
         <h3>Generated Password</h3>
         <p>{{ result }}</p>
     {% endif %}
-    
+
     {% if result_type == 'generate_key' %}
         <h3>Generated Key</h3>
         <pre>{{ result }}</pre>
     {% endif %}
-    
+
     {% if result_type == 'encrypt_file' %}
         <h3>File Encrypted Successfully</h3>
     {% endif %}
-    
+
     {% if result_type == 'decrypt_file' %}
         <h3>File Decrypted Successfully</h3>
     {% endif %}
-    
+
     {% if result_type == 'hash_file' %}
         <h3>File Hash</h3>
         <p>{{ result }}</p>
     {% endif %}
-    
+
     {% if filename %}
-        <a href="{{ url_for('download_file', filename=filename) }}">Download file</a>
+        <a href="{{ url_for('download', filename=filename) }}">Download file</a>
     {% endif %}
 </body>
 </html>
