@@ -19,7 +19,6 @@ video = Blueprint("video", __name__, static_folder="static",
 
 @video.route("/encode")
 def video_encode():
-
     return render_template("encode-video.html")
 
 
