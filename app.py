@@ -1,4 +1,9 @@
+# hashing, password, keys, rsa, aes
+from privacy.rsa.rsa import rsa
+from privacy.aes.aes import aes
+from privacy.file.file import file
 from privacy.generate.generate import generate
+# Steganography
 from type.image.image import image
 from type.audio.audio import audio
 from type.text.text import text
@@ -66,20 +71,14 @@ for mode, folders in MODES.items():
     app.config['UPLOAD_' + mode.upper() + '_FOLDER'] = folders['upload_folder']
     app.config[mode.upper() + '_CACHE_FOLDER'] = folders['cache_folder']
 
-
-# Steganography
-
-# hashing, password, keys, rsa, aes
-# from privacy.file.file import file
-# from privacy.aes.aes import aes
-# from privacy.rsa.rsa import rsa
-
-
 app.register_blueprint(image, url_prefix="/image")
 app.register_blueprint(audio, url_prefix="/audio")
 app.register_blueprint(text, url_prefix="/text")
 app.register_blueprint(video, url_prefix="/video")
-# app.register_blueprint(generate, url_prefix="/generate")
+app.register_blueprint(generate, url_prefix="/generate")
+app.register_blueprint(file, url_prefix="/file")
+app.register_blueprint(rsa, url_prefix="/rsa")
+app.register_blueprint(aes, url_prefix="/aes")
 
 
 # Database Setup SQLITE
