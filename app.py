@@ -114,29 +114,21 @@ class User(UserMixin, db.Model):
 with app.app_context():
     db.create_all()
 
-# Landing Page
-
-
-# Home: User Home: Let User do Steganography, Hashing, Password, Keys, RSA, AES
+# Landing Page Home: User Home
 @app.route("/")
 def home():
     return render_template("home.html")
 
+# User do Steganography, Hashing, Password, Keys, RSA, AES
+@app.route("/steganography")
+def steganography():
+    return render_template("steganography.html")
 
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
 
-# About: Secure App About Page
-
-
-@app.route("/user")
-def user():
-    return render_template('user.html')
-
 # Register Page
-
-
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     form = RegistrationForm()
@@ -153,8 +145,6 @@ def register():
     return render_template('register.html', form=form)
 
 # Login Page
-
-
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
@@ -170,8 +160,6 @@ def login():
     return render_template('login.html', form=form)
 
 # Logout Page
-
-
 @app.route('/logout')
 @login_required
 def logout():
@@ -179,7 +167,7 @@ def logout():
     flash('You have been logged out.', 'info')
     return redirect(url_for('login'))
 
-
+# Forgot Password Page
 @app.route('/forgot_password', methods=['GET', 'POST'])
 def forgot_password():
     form = PasswordResetForm()
@@ -194,7 +182,7 @@ def forgot_password():
             flash('Invalid email, security question or security answer.', 'danger')
     return render_template('forgot_password.html', form=form)
 
-
+# About: Secure App About Page
 @app.route("/about")
 def about():
     return render_template("about.html")
