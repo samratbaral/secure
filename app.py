@@ -1,3 +1,15 @@
+# Steganography
+from type.video.video import video
+from type.text.text import text
+from type.audio.audio import audio
+from type.image.image import image
+
+# hashing, password, keys, rsa, aes
+# from privacy.file.file import file
+# from privacy.aes.aes import aes
+# from privacy.rsa.rsa import rsa
+from privacy.generate.generate import generate
+
 import os
 from flask import Flask, render_template, request, redirect, url_for, flash, send_file
 from flask_sqlalchemy import SQLAlchemy
@@ -44,15 +56,15 @@ MODES = {
         'upload_folder': 'privacy/generate/static',
         'cache_folder': 'privacy/generate/__pycache__'
     },
-     'RSA': {
+    'RSA': {
         'upload_folder': 'privacy/rsa/static',
         'cache_folder': 'privacy/rsa/__pycache__'
     },
-     'AES': {
+    'AES': {
         'upload_folder': 'privacy/aes/static',
         'cache_folder': 'privacy/aes/__pycache__'
     },
-     'File': {
+    'File': {
         'upload_folder': 'privacy/file/static',
         'cache_folder': 'privacy/file/__pycache__'
     }
@@ -61,15 +73,17 @@ for mode, folders in MODES.items():
     app.config['UPLOAD_' + mode.upper() + '_FOLDER'] = folders['upload_folder']
     app.config[mode.upper() + '_CACHE_FOLDER'] = folders['cache_folder']
 
-#Database Setup SQLITE
+# Database Setup SQLITE
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
-db= SQLAlchemy(app)
+db = SQLAlchemy(app)
 
-#User Activity Management
+# User Activity Management
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'
 
-#User Schema
+# User Schema
+
+
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(50), nullable=False)
@@ -88,23 +102,9 @@ class User(UserMixin, db.Model):
     def check_password(self, password):
         return check_password_hash(self.password, password)
 
+
 with app.app_context():
     db.create_all()
-
-
-
-
-# Steganography
-from type.image.image import image
-from type.audio.audio import audio
-from type.text.text import text
-from type.video.video import video
-
-# hashing, password, keys,rsa, aes
-from privacy.generate.generate import generate
-# from privacy.rsa.rsa import rsa
-# from privacy.aes.aes import aes
-# from privacy.file.file import file
 
 
 app.register_blueprint(image, url_prefix="/image")
@@ -112,39 +112,95 @@ app.register_blueprint(audio, url_prefix="/audio")
 app.register_blueprint(text, url_prefix="/text")
 app.register_blueprint(video, url_prefix="/video")
 
-#Landing Page
-@app.route("/user")
-def index():
-    return render_template('user.html')
-#Login Page
-@app.route("/user")
-def index():
-    return render_template('user.html')
-#Register Page
-@app.route("/user")
-def index():
-    return render_template('user.html')
+# Landing Page
 
 
-#Home: User Home: Let User do Steganography, Hashing, Password, Keys, RSA, AES
+
+# Home: User Home: Let User do Steganography, Hashing, Password, Keys, RSA, AES
 @app.route("/")
-@login_required
 def home():
     return render_template("home.html")
+
+
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
 
-#About: Secure App About Page
+# About: Secure App About Page
+
+@app.route("/user")
+def user():
+    return render_template('user.html')
+
+# Register Page
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    form = RegistrationForm()
+    if form.validate_on_submit():
+        user = User(email=form.email.data)
+        user.set_password(form.password.data)
+        user.security_question = form.security_question.data
+        user.security_answer = form.security_answer.data
+        db.session.add(user)
+        db.session.commit()
+        flash('Registration successful. You can now log in.', 'success')
+        return redirect(url_for('login'))
+    print(form)
+    return render_template('register.html', form=form)
+
+# Login Page
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('dashboard'))
+    form = LoginForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=form.email.data).first()
+        if user and user.check_password(form.password.data):
+            login_user(user)
+            return redirect(url_for('dashboard'))
+        else:
+            flash('Invalid email or password.', 'danger')
+    return render_template('login.html', form=form)
+
+# Logout Page
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    flash('You have been logged out.', 'info')
+    return redirect(url_for('login'))
+
+@app.route('/forgot_password', methods=['GET', 'POST'])
+def forgot_password():
+    form = PasswordResetForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=form.email.data).first()
+        if user and user.security_question == form.security_question.data and user.security_answer == form.security_answer.data:
+            user.set_password(form.new_password.data)
+            db.session.commit()
+            flash('Password reset successful. You can now log in.', 'success')
+            return redirect(url_for('login'))
+        else:
+            flash('Invalid email, security question or security answer.', 'danger')
+    return render_template('forgot_password.html', form=form)
+
+
+
+
+
+
 @app.route("/about")
 def about():
     return render_template("about.html")
 
 
-#Account: User Account Page: Similar to Wallet
+# Account: User Account Page: Similar to Wallet
 @app.route("/account")
 def account():
     return render_template("account.html")
+
 
 if __name__ == "__main__":
     app.run(debug=True)
