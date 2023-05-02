@@ -33,6 +33,7 @@
                 <h1 class="display-4 text-monospace"> Login / Register </h1>
                 <p class="lead">
                 {% if current_user.is_authenticated %}
+                <h1 class="display-4 text-monospace"> Logout {{ current_user.name }}</h1>
                 <p>Hello, {{ current_user.name }}!</p>
                 <a href="{{ url_for('logout') }}">Logout</a>
                 {% else %}
@@ -40,7 +41,7 @@
                 <a href="{{ url_for('login') }}">Login</a> | <a href="{{ url_for('register') }}">Register</a>
                 {% endif %}
                 <hr>
-                <p><a href="{{ url_for('about') }}">Go to About</a></p>
+                <p><a href="{{ url_for('dashboard') }}">Go to Dashboard</a></p>
 
             </div>
         </div>
